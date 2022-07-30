@@ -10,6 +10,8 @@ export default function Home() {
       </Head>
 
       <h1 className="text-3xl font-bold">Refren store</h1>
+      {/* GITHUB CHECK */}
+      <h1>Hello world</h1>
     </div>
   );
 }
