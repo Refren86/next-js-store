@@ -4,7 +4,7 @@ const connection = {};
 
 const connect = async () => {
   if (connection.isConnected) {
-    console.log('Already connected');
+    console.log('DB is already connected');
     return;
   }
 
@@ -19,7 +19,7 @@ const connect = async () => {
     await mongoose.disconnect();
   }
   const db = await mongoose.connect(process.env.MONGODB_URI);
-  console.log('New connection');
+  console.log('Database connected successfully!');
   connection.isConnected = db.connections[0].readyState;
 }
 
@@ -28,6 +28,7 @@ const disconnect = async () => {
     if (process.env.NODE_ENV === 'production') { // only disconnect in production mode, not development
       await mongoose.disconnect();
       connection.isConnected = false;
+      console.log('DB has been disconnected');
     } else {
       console.log('Not disconnected');
     }

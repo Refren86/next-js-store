@@ -68,7 +68,7 @@ const ProductScreen = () => {
             <li>Category: {product.category}</li>
             <li>Brand: {product.brand}</li>
             <li>
-              {product.rating}/5 of {product.numReviews} reviews
+              {product.rating} of {product.numReviews} reviews
             </li>
             <li>Description: {product.description}</li>
           </ul>

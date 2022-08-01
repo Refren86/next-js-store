@@ -1,18 +1,52 @@
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+import { signIn, useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
+import { getError } from '../utils/error';
 import Layout from '../components/Layout';
 
 const LoginScreen = () => {
+  const { data: session } = useSession(); // hook provided by nextAuth to get the session data
+  const router = useRouter();
+
+  const { redirect } = router.query;
+
+  useEffect(() => {
+    // check if user is logged in (session?.user gets its value from signIn function)
+    if (session?.user) {
+      router.push(redirect || '/'); // if there is no redirect in query string, redirect to main page
+    }
+  }, [router, session, redirect])
+
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
 
-  const submitHandler = (data) => {
-    const { email, password } = data;
+  const submitHandler = async(data) => {
+    try {
+      const { email, password } = data;
+      
+      // 1st param - the way we're going to authenticate (its provider, can be google, github etc.); 2nd param - user credentials;
+      // this function will be handled by NextAuth
+      const result = await signIn('credentials', {
+        redirect: false, // turning off redirect, because we'll redirect user manually after login
+        email,
+        password
+      })
+
+      // handling error in API
+      if (result.error) {
+        toast.error(result.error)
+      }
+    } catch (err) {
+      toast.error(getError(err))
+    }
+    
   }
 
   return (
