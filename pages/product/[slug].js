@@ -39,8 +39,6 @@ const ProductScreen = () => {
     });
   };
 
-  console.log(cart);
-
   return (
     <Layout title={product.name}>
       <div className="py-2">
