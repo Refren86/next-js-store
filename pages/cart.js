@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
@@ -9,6 +10,7 @@ import { XIcon } from '@heroicons/react/outline';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import { CART_ADD_ITEM, CART_REMOVE_ITEM } from '../utils/consts/cart.types';
+import { toast } from 'react-toastify';
 
 const CartScreen = () => {
   const { state, dispatch } = useContext(Store);
@@ -22,10 +24,17 @@ const CartScreen = () => {
     dispatch({ type: CART_REMOVE_ITEM, payload: item });
   };
 
-  const updateCartHandler = (item, qty) => {
+  const updateCartHandler = async (item, qty) => {
     const quantity = Number(qty);
-    dispatch({type: CART_ADD_ITEM, payload: { ...item, quantity }})
-  }
+    const { data } = await axios.get(`/api/products/${item._id}`);
+
+    if (data.countInStock < quantity) {
+      return toast.error('Sorry! The product is out of stock.');
+    }
+
+    dispatch({ type: CART_ADD_ITEM, payload: { ...item, quantity } });
+    toast.success('Product updated in the cart');
+  };
 
   return (
     <Layout title="Shopping Cart">
@@ -69,10 +78,21 @@ const CartScreen = () => {
                     </td>
 
                     <td className="p-5 text-right">
-                      <select value={item.quantity} onChange={e => updateCartHandler(item, e.target.value)}>
-                        {[...Array(item.countInStock).keys()].map(num => ( // this will make array of numbers, based on count number
-                          <option key={num + 1} value={num + 1}>{num + 1}</option>
-                        ))}
+                      <select
+                        value={item.quantity}
+                        onChange={(e) =>
+                          updateCartHandler(item, e.target.value)
+                        }
+                      >
+                        {[...Array(item.countInStock).keys()].map(
+                          (
+                            num // this will make array of numbers, based on count number
+                          ) => (
+                            <option key={num + 1} value={num + 1}>
+                              {num + 1}
+                            </option>
+                          )
+                        )}
                       </select>
                     </td>
 

@@ -35,6 +35,15 @@ const disconnect = async () => {
   }
 }
 
-const db = { connect, disconnect };
+// fix for serialization error
+const convertDocToString = (doc) => {
+  doc._id = doc._id.toString();
+  doc.createdAt = doc.createdAt.toString();
+  doc.updatedAt = doc.updatedAt.toString();
+
+  return doc;
+}
+
+const db = { connect, disconnect, convertDocToString };
 
 export default db;

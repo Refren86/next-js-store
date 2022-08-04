@@ -1,42 +1,42 @@
-import React, { useContext } from 'react';
-import { useRouter } from 'next/router';
+import axios from 'axios';
 import Link from 'next/link';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
+import React, { useContext } from 'react';
 
-import Layout from '../../components/Layout';
-import { data } from '../../utils/data';
+import Product from '../../models/Product';
 import { Store } from '../../utils/Store';
 import { CART_ADD_ITEM } from '../../utils/consts/cart.types';
+import Layout from '../../components/Layout';
+import db from '../../utils/db';
 
-const ProductScreen = () => {
+const ProductScreen = ({ product }) => {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
 
-  const { query } = useRouter();
-  const { slug } = query;
-
-  const product = data.products.find((prod) => prod.slug === slug);
-
   if (!product) {
-    return <div>Product Not Found</div>;
+    return <Layout title="Not Found">Product Not Found</Layout>;
   }
 
-  const addToCartHandler = () => {
+  const addToCartHandler = async () => {
     // refactor
     const existingItem = cart.cartItems.find(
       (item) => item.slug === product.slug
     );
     const quantity = existingItem ? existingItem.quantity + 1 : 1;
 
-    if (product.countInStock < quantity) {
-      alert('Sorry! The product is out of stock.')
-      return;
+    const { data } = await axios.get(`/api/products/${product._id}`);
+
+    if (data.countInStock < quantity) {
+      return toast.error('Sorry! The product is out of stock.');
     }
 
     dispatch({
       type: CART_ADD_ITEM,
       payload: { ...product, quantity },
     });
+
+    toast.success('Product added to the cart');
   };
 
   return (
@@ -96,5 +96,20 @@ const ProductScreen = () => {
     </Layout>
   );
 };
+
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const { slug } = params;
+
+  await db.connect();
+  const product = await Product.findOne({ slug }).lean();
+  await db.disconnect();
+
+  return {
+    props: {
+      product: product ? db.convertDocToString(product) : null,
+    },
+  };
+}
 
 export default ProductScreen;

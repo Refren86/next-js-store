@@ -5,6 +5,7 @@ import {
   CART_ADD_ITEM,
   CART_REMOVE_ITEM,
   CART_RESET,
+  SAVE_PAYMENT_METHOD,
   SAVE_SHIPPING_ADDRESS,
 } from './consts/cart.types';
 
@@ -13,7 +14,7 @@ export const Store = createContext();
 const initialState = {
   cart: Cookies.get('cart')
     ? JSON.parse(Cookies.get('cart'))
-    : { cartItems: [], shippingAddress: {} },
+    : { cartItems: [], shippingAddress: {}, paymentMethod: '' },
 };
 
 const reducer = (state, action) => {
@@ -67,10 +68,20 @@ const reducer = (state, action) => {
           ...state.cart,
           shippingAddress: {
             ...state.cart.shippingAddress,
-            ...action.payload
-          }
+            ...payload,
+          },
+        },
+      };
+    }
+
+    case SAVE_PAYMENT_METHOD: {
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          paymentMethod: payload,
         }
-      }
+      };
     }
 
     default:
