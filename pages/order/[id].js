@@ -53,14 +53,12 @@ const OrderScreen = () => {
   // paypalDispatch - used to reset the options and set the client id for paypal
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
-  const [
-    { loading, error, order, successPay, loadingPay },
-    dispatch,
-  ] = useReducer(reducer, {
-    loading: true,
-    order: {},
-    error: '',
-  });
+  const [{ loading, error, order, successPay, loadingPay }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      order: {},
+      error: '',
+    });
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -96,7 +94,7 @@ const OrderScreen = () => {
 
       loadPaypalScript();
     }
-  }, [orderId, order, paypalDispatch, successPay]);
+  }, [orderId, successPay]);
 
   const {
     isDelivered,
@@ -131,7 +129,10 @@ const OrderScreen = () => {
       try {
         console.log('ORDER DETAILS:', details);
         dispatch({ type: PAYMENT_START });
-        const { data } = await axios.put(`/api/orders/${order._id}/pay`, details);
+        const { data } = await axios.put(
+          `/api/orders/${order._id}/pay`,
+          details
+        );
         dispatch({ type: PAYMENT_SUCCESS, payload: data });
         toast.success('Order is paid successfully 🥳');
       } catch (err) {
@@ -143,7 +144,7 @@ const OrderScreen = () => {
 
   const onError = (err) => {
     toast.error(getError(err));
-  }
+  };
 
   return (
     <Layout title={`Order ${orderId}`}>
@@ -176,7 +177,10 @@ const OrderScreen = () => {
               <div>{paymentMethod}</div>
 
               {isPaid ? (
-                <div className="alert-success">Paid at {paidAt}</div>
+                <div className="alert-success">
+                  Paid at {new Date(paidAt).toDateString()} -{' '}
+                  {new Date(paidAt).toLocaleTimeString()}
+                </div>
               ) : (
                 <div className="alert-error">Not paid</div>
               )}
