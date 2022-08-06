@@ -6,7 +6,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Store } from '../utils/Store';
 import Layout from '../components/Layout';
 import CheckoutWizard from '../components/CheckoutWizard';
-import { SAVE_PAYMENT_METHOD } from '../utils/consts/cart.types';
+import { CART_SAVE_PAYMENT_METHOD } from '../utils/consts/cart.types';
 
 const PaymentScreen = () => {
   const router = useRouter();
@@ -23,7 +23,7 @@ const PaymentScreen = () => {
       return toast.error('Payment method is required')
     }
 
-    dispatch({ type: SAVE_PAYMENT_METHOD, payload: selectedPaymentMethod })
+    dispatch({ type: CART_SAVE_PAYMENT_METHOD, payload: selectedPaymentMethod })
     Cookies.set(
       'cart',
       JSON.stringify({
@@ -69,11 +69,18 @@ const PaymentScreen = () => {
           >
             Back
           </button>
-          <button className="primary-button">Next</button>
+          <button
+            className="primary-button"
+            onClick={() => router.push('/place-order')}
+          >
+            Next
+          </button>
         </div>
       </form>
     </Layout>
   );
 };
+
+PaymentScreen.auth = true; // only logged in user will be able to access this page
 
 export default PaymentScreen;

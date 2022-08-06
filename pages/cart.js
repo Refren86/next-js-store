@@ -2,6 +2,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
@@ -10,7 +11,6 @@ import { XIcon } from '@heroicons/react/outline';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import { CART_ADD_ITEM, CART_REMOVE_ITEM } from '../utils/consts/cart.types';
-import { toast } from 'react-toastify';
 
 const CartScreen = () => {
   const { state, dispatch } = useContext(Store);

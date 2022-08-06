@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 import CheckoutWizard from '../components/CheckoutWizard';
 
 import { Store } from '../utils/Store';
-import { SAVE_SHIPPING_ADDRESS } from '../utils/consts/cart.types';
+import { CART_SAVE_SHIPPING_ADDRESS } from '../utils/consts/cart.types';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 
@@ -35,7 +35,7 @@ const ShippingScreen = () => {
 
   const submitHandler = ({ fullName, address, city, postalCode, country }) => {
     dispatch({
-      type: SAVE_SHIPPING_ADDRESS,
+      type: CART_SAVE_SHIPPING_ADDRESS,
       payload: { fullName, address, city, postalCode, country },
     });
 

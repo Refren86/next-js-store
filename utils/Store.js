@@ -3,10 +3,11 @@ import Cookies from 'js-cookie';
 
 import {
   CART_ADD_ITEM,
+  CART_CLEAR_ITEMS,
   CART_REMOVE_ITEM,
   CART_RESET,
-  SAVE_PAYMENT_METHOD,
-  SAVE_SHIPPING_ADDRESS,
+  CART_SAVE_PAYMENT_METHOD,
+  CART_SAVE_SHIPPING_ADDRESS,
 } from './consts/cart.types';
 
 export const Store = createContext();
@@ -61,7 +62,17 @@ const reducer = (state, action) => {
       };
     }
 
-    case SAVE_SHIPPING_ADDRESS: {
+    case CART_CLEAR_ITEMS: {
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          cartItems: [],
+        },
+      };
+    }
+
+    case CART_SAVE_SHIPPING_ADDRESS: {
       return {
         ...state,
         cart: {
@@ -74,13 +85,13 @@ const reducer = (state, action) => {
       };
     }
 
-    case SAVE_PAYMENT_METHOD: {
+    case CART_SAVE_PAYMENT_METHOD: {
       return {
         ...state,
         cart: {
           ...state.cart,
           paymentMethod: payload,
-        }
+        },
       };
     }
 
