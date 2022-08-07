@@ -20,6 +20,8 @@ const handler = async (req, res) => {
   })
 
   const order = await newOrder.save(); // saving in db
+  await db.disconnect();
+  
   res.status(201).send(order);
 }
 

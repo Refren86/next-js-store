@@ -74,10 +74,12 @@ const PlaceOrderScreen = () => {
     }
   };
 
+  console.log(cartItems);
+
   return (
     <Layout title="Place Order">
       <CheckoutWizard activeStep={3} />
-      <h1 className="mb-4 text-xl">Place Order</h1>
+      <h2 className="mb-4 text-xl">Place Order</h2>
       {cartItems.length === 0 ? (
         <div>
           Cart is empty.

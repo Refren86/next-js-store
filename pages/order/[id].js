@@ -146,6 +146,10 @@ const OrderScreen = () => {
     toast.error(getError(err));
   };
 
+  console.log('PAID?', isPaid);
+  console.log('HELLO?');
+  console.log('PAID?', isPaid);
+
   return (
     <Layout title={`Order ${orderId}`}>
       <h2 className="mb-4 text-xl">Order {orderId}</h2>
@@ -178,8 +182,7 @@ const OrderScreen = () => {
 
               {isPaid ? (
                 <div className="alert-success">
-                  Paid at {new Date(paidAt).toDateString()} -{' '}
-                  {new Date(paidAt).toLocaleTimeString()}
+                  Paid at {new Date(paidAt).toDateString()} - {new Date(paidAt).toLocaleTimeString()}
                 </div>
               ) : (
                 <div className="alert-error">Not paid</div>
