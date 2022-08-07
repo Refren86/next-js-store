@@ -147,8 +147,6 @@ const OrderScreen = () => {
   };
 
   console.log('PAID?', isPaid);
-  console.log('HELLO?');
-  console.log('PAID?', isPaid);
 
   return (
     <Layout title={`Order ${orderId}`}>
